@@ -7,6 +7,7 @@ public class PlayerMove : MonoBehaviour
     public float moveSpeed = 3.5f;
     public float rotationSpeed = 100f;
     private Rigidbody rb;
+    private Animator animator;
 
 
 
@@ -14,11 +15,17 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetButtonDown("Jump"))
+        {
+            rb.AddForce(Vector3.up * 50 * Time.deltaTime, ForceMode.VelocityChange);
+        }
+
     }
     void FixedUpdate()
     {
@@ -33,6 +40,10 @@ public class PlayerMove : MonoBehaviour
             rb.MoveRotation(rb.rotation * Quaternion.Euler(rotateY));
         }
         rb.MovePosition(rb.position + transform.forward * Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime + transform.right * Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime);
+
+
+        animator.SetFloat("BlendV", Input.GetAxis("Vertical"));
+        animator.SetFloat("BlendH", Input.GetAxis("Horizontal"));
 
     }
 }
